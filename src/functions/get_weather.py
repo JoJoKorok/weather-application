@@ -42,7 +42,7 @@ def get_weather_by_city_name(city_name, country_code):
 
     try:
         # GET request to proxy API
-        response = requests.get(BASE_URL, params=params, headers=headers, timeout=8)
+        response = requests.get(BASE_URL, params=params, headers=headers, timeout=120)
 
         # Exception raised for bad status codes.
         response.raise_for_status()
@@ -98,7 +98,7 @@ def get_weather_by_postal_code(postal_code, country_code="us"):
 
     try:
         # GET request to proxy API
-        response = requests.get(BASE_URL, params=params, headers=headers, timeout=8)
+        response = requests.get(BASE_URL, params=params, headers=headers, timeout=120)
 
         # Exception raised for bad status codes.
         response.raise_for_status()
