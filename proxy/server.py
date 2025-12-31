@@ -90,6 +90,11 @@ def _enforce_rate_limit(key: str, limit: int) -> None:
 API Endpoint
 """
 
+# Basic root endpoint for sanity checks and uptime monitors.
+@app.get("/")
+async def root():
+    return {"status": "ok", "hint": "Use /weather"}
+
 # Decorator (function abstraction) for FastAPT to handle GET requests to "/weather".
 @app.get("/weather")
 
