@@ -1,8 +1,6 @@
-import os
-import time
+import os, time, httpx
 from collections import defaultdict, deque
-
-import httpx
+from datetime import datetime, timezone
 from fastapi import FastAPI, HTTPException, Request
 
 
@@ -23,6 +21,35 @@ PROXY_TOKENS = set(
 
 # Limits API calls allowed in env var, or defaults to 60 per minute.
 OPENWEATHER_RATE_LIMIT_PER_MIN = int(os.getenv("RATE_LIMIT_PER_MIN", "60"))
+
+# Global daily limit for ALL users combined
+DAILY_LIMIT = 1000
+
+# Tracks usage for the current UTC day
+_usage_day = None          # e.g. "2025-12-31"
+_usage_count = 0
+
+def _enforce_daily_limit() -> None:
+    global _usage_day, _usage_count
+
+    # Uses UTC date so it’s consistent regardless of server location
+    today = datetime.now(timezone.utc).date().isoformat()
+
+    # Resets counter when the date changes
+    if _usage_day != today:
+        _usage_day = today
+        _usage_count = 0
+
+    # Blocks if the global limit is reached
+    if _usage_count >= DAILY_LIMIT:
+        raise HTTPException(
+            status_code=429,
+            detail=f"Daily limit reached ({DAILY_LIMIT} requests/day). Try again tomorrow."
+        )
+
+    # Counts this request
+    _usage_count += 1
+
 
 # Stores the endpoint of OpenWeatherMap's API
 OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
@@ -112,6 +139,9 @@ async def weather(
     units: str = "metric"
 ):
 
+    # Enforce daily limit at start of request
+    _enforce_daily_limit()
+    
     # Checks if nothing is retrieved for secret key in env vars.
     if not OPENWEATHER_API_KEY:
         raise HTTPException(
@@ -166,8 +196,9 @@ async def weather(
             )
 
         
-    # Calls OpenWeatherMap with an async HTTP client with an 8-second timeout.
-    async with httpx.AsyncClient(timeout=8) as client:
+    # Calls OpenWeatherMap with an async HTTP client with an 120-second timeout.
+    # Inactivity for requests increases delay from Render by up to 50 seconds or more.
+    async with httpx.AsyncClient(timeout=120) as client:
         response = await client.get(OPENWEATHER_URL, params=params)
         
     # Checks OpenWeatherMap Call response code for failure codes.
