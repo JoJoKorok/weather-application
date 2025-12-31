@@ -11,6 +11,20 @@ __pycache__/
 .venv/
 venv/
 
+# Test / build artifacts
+.pytest_cache/
+.coverage
+
+# OS files
+.DS_Store
+Thumbs.db
+
 # Editor config
 .vscode/
 .idea/
+
+# Local archive / unused files
+_trash/
+_archive/
+_unused/
+_graveyard/
