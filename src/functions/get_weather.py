@@ -2,33 +2,26 @@ import os
 import requests
 
 
-def _get_proxy_url():
+def _get_proxy_url() -> str:
     # Retrieves the proxy API endpoint from environment variables.
     # This prevents hardcoding the proxy URL into the source code.
 
+    DEFAULT_PROXY_URL = "https://weather-application-c7bh.onrender.com/weather"
+    
     proxy_url = os.getenv("WEATHER_PROXY_URL", "").strip()
 
-    if not proxy_url:
-        raise RuntimeError(
-            "WEATHER_PROXY_URL is not set.\n"
-            "Please set the environment variable before running the program.\n"
-            "Example (PowerShell):\n"
-            "  $env:WEATHER_PROXY_URL='https://your-proxy-host/weather'"
-        )
-
-    return proxy_url
+    return proxy_url if proxy_url else DEFAULT_PROXY_URL
 
 
-def _get_proxy_headers():
+    
+def _get_proxy_headers() -> dict:
+    
     # Builds optional headers for proxy authentication.
     # If a proxy token is provided, it is sent as a Bearer token.
+    token = os.getenv("WEATHER_PROXY_TOKEN", "").strip()
 
-    proxy_token = os.getenv("WEATHER_PROXY_TOKEN", "").strip()
-
-    if proxy_token:
-        return {"Authorization": f"Bearer {proxy_token}"}
-
-    return {}
+    # Sends Bearer token only if provided
+    return {"Authorization": f"Bearer {token}"} if token else {}
 
 
 def get_weather_by_city_name(city_name, country_code):
