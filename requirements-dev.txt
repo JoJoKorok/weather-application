@@ -1,0 +1,9 @@
+pytest
+pytest-asyncio
+pytest-cov
+black
+ruff
+mypy
+httpx
+fastapi
+uvicorn
