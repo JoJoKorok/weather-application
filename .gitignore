@@ -28,3 +28,8 @@ _trash/
 _archive/
 _unused/
 _graveyard/
+
+# PyInstaller build artifacts
+*.spec
+build/
+dist/
