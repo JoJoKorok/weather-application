@@ -17,6 +17,3 @@ The project is structured with a client-side application and a lightweight proxy
 - Clear separation between client logic and network access
 
 ---
-
-## Project Structure
-
