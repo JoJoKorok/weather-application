@@ -1,6 +1,7 @@
 import requests
-from functions.det_questions import location_data
-from functions.get_weather import get_weather_by_city_name, get_weather_by_postal_code
+from src.functions.det_questions import location_data
+from src.functions.get_weather import get_weather_by_city_name, get_weather_by_postal_code
+
 
 if __name__ == "__main__":
     
