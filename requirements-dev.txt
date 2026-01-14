@@ -1,6 +1,8 @@
+# Development dependencies (testing + tooling)
 pytest
 pytest-asyncio
 pytest-cov
+anyio
 black
 ruff
 mypy

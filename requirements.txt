@@ -1,2 +1,6 @@
+# Runtime dependencies (client + proxy)
 requests
 pycountry
+fastapi
+uvicorn
+httpx

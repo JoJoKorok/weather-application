@@ -17,5 +17,5 @@ if (!(Test-Path ".venv")) {
 .\.venv\Scripts\pip install -r proxy\requirements.txt
 
 Write-Host "Setup complete."
-Write-Host "Run client: .\.venv\Scripts\python src\main.py"
+Write-Host "Run client: '.\.venv\Scripts\python src\main.py' or 'python -m src.main'"
 Write-Host "Run proxy:  .\.venv\Scripts\uvicorn proxy.server:app --host 127.0.0.1 --port 8000"
