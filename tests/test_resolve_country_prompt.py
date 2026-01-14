@@ -1,6 +1,6 @@
 import builtins, pytest
 
-from src.data.country_codes import resolve_country, prompt_country_code
+from ..src.data.country_codes import resolve_country, prompt_country_code
 
 
 def test_resolve_country_alpha2():
