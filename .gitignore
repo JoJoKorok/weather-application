@@ -33,3 +33,7 @@ _graveyard/
 *.spec
 build/
 dist/
+
+# Runtime databases
+*.sqlite
+*.sqlite3
