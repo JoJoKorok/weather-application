@@ -1,7 +1,6 @@
 import pytest
-from fastapi.testclient import TestClient
-
 import proxy.server as server
+from fastapi.testclient import TestClient
 from proxy.server import app as proxy_app
 
 

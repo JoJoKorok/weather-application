@@ -1,16 +1,17 @@
-# Runs pytest from the project root using the project's venv.
+param(
+    [Parameter(ValueFromRemainingArguments=$true)]
+    [string[]] $Args
+)
 
-$ErrorActionPreference = "Stop"
+# Project root = one level above /tests
+$ROOT = Split-Path -Parent $PSScriptRoot
 
-# Moves from /tests back to repo root.
-$repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-Set-Location -Path $repoRoot
+# Make "src" importable
+$env:PYTHONPATH = $ROOT
 
-# Uses repo root venv python if available, otherwise falls back to system python.
-$venvPython = Join-Path $repoRoot ".venv\Scripts\python.exe"
+# Use venv python if it exists, otherwise fallback to "python"
+$PY = Join-Path $ROOT ".venv\Scripts\python.exe"
+if (-not (Test-Path $PY)) { $PY = "python" }
 
-if (Test-Path $venvPython) {
-    & $venvPython -m pytest @args
-} else {
-    python -m pytest @args
-}
+& $PY -m pytest $Args
+exit $LASTEXITCODE
